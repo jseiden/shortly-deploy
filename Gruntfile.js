@@ -3,6 +3,13 @@ module.exports = function(grunt) {
   grunt.initConfig({
     pkg: grunt.file.readJSON('package.json'),
     concat: {
+      options: {
+        separator: ';\n',
+      },
+      dist: {
+        src: ['./public/**/*.js'],
+        dest: './public/dist/app.js'
+      }
     },
 
     mochaTest: {
@@ -21,23 +28,44 @@ module.exports = function(grunt) {
     },
 
     uglify: {
+      options: {
+        mangle : true,
+        compress : true,
+        mangleProperties : true,
+
+      },
+      myTarget : {
+        files : {
+          './public/dist/app.min.js' : ['./public/dist/app.js']
+        }
+      }
     },
 
     jshint: {
-      files: [
-        // Add filespec list here
-      ],
+      // files: [
+      //   // Add filespec list here
+      // ],
       options: {
-        force: 'true',
+        force: 'false',
         jshintrc: '.jshintrc',
         ignores: [
           'public/lib/**/*.js',
           'public/dist/**/*.js'
         ]
-      }
+      },
+      beforeconcat: ['./public/**/*.js'],
+      // afterconcat: ['./public/dist/app.js']
     },
 
     cssmin: {
+      // options: {
+
+      // }
+      target : {
+        files : {
+          './public/dist/style.min.css' : ['./public/style.css']
+        }
+      }
     },
 
     watch: {
@@ -63,6 +91,7 @@ module.exports = function(grunt) {
     },
   });
 
+  //these are like the require statements aka dependencies
   grunt.loadNpmTasks('grunt-contrib-uglify');
   grunt.loadNpmTasks('grunt-contrib-jshint');
   grunt.loadNpmTasks('grunt-contrib-watch');
@@ -90,11 +119,12 @@ module.exports = function(grunt) {
   ////////////////////////////////////////////////////
 
   grunt.registerTask('test', [
-    'mochaTest'
+    'jshint'
+    // ,
+    // 'mochaTest'
   ]);
 
-  grunt.registerTask('build', [
-  ]);
+  grunt.registerTask('build', [ 'concat','uglify','cssmin', 'test']);
 
   grunt.registerTask('upload', function(n) {
     if(grunt.option('prod')) {
