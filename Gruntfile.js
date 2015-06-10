@@ -7,7 +7,7 @@ module.exports = function(grunt) {
         separator: ';\n',
       },
       dist: {
-        src: ['./public/**/*.js'],
+        src: ['./public/lib/jquery.js','./public/lib/underscore.js','./public/lib/handlebars.js', './public/lib/backbone.js', './public/client/*.js'],
         dest: './public/dist/app.js'
       }
     },
@@ -119,9 +119,7 @@ module.exports = function(grunt) {
   ////////////////////////////////////////////////////
 
   grunt.registerTask('test', [
-    'jshint'
-    // ,
-    // 'mochaTest'
+    'jshint', 'mochaTest'
   ]);
 
   grunt.registerTask('build', [ 'concat','uglify','cssmin', 'test']);
@@ -134,9 +132,7 @@ module.exports = function(grunt) {
     }
   });
 
-  grunt.registerTask('deploy', [
-    // add your deploy tasks here
-  ]);
+  grunt.registerTask('deploy', ['build', 'upload']);
 
 
 };
