@@ -87,6 +87,7 @@ module.exports = function(grunt) {
 
     shell: {
       prodServer: {
+        command: 'grunt upload --prod'
       }
     },
   });
